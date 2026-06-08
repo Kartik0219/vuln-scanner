@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<nmaprun scanner="nmap" args="nmap -sV -oX - &lt;target&gt;" version="7.94">
+  <host>
+    <status state="up" reason="syn-ack" />
+    <address addr="10.0.0.30" addrtype="ipv4" />
+    <hostnames>
+      <hostname name="lab-dc.local" type="PTR" />
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="445">
+        <state state="open" reason="syn-ack" />
+        <service name="microsoft-ds" method="probed" conf="10" product="Microsoft-DS" version="6.1" />
+      </port>
+      <port protocol="tcp" portid="3389">
+        <state state="open" reason="syn-ack" />
+        <service name="ms-wbt-server" method="probed" conf="10" product="Microsoft Terminal Services" />
+      </port>
+    </ports>
+  </host>
+  <host>
+    <status state="up" reason="syn-ack" />
+    <address addr="10.0.0.31" addrtype="ipv4" />
+    <hostnames>
+      <hostname name="lab-web2.local" type="PTR" />
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack" />
+        <service name="http" method="probed" conf="10" product="Apache httpd" version="2.4.49" />
+      </port>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack" />
+        <service name="ssh" method="probed" conf="10" product="OpenSSH" version="7.2p2" />
+      </port>
+    </ports>
+  </host>
+  <host>
+    <status state="up" reason="syn-ack" />
+    <address addr="10.0.0.32" addrtype="ipv4" />
+    <hostnames>
+      <hostname name="lab-clean.local" type="PTR" />
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack" />
+        <service name="ssh" method="probed" conf="10" product="OpenSSH" version="9.6p1" />
+      </port>
+      <port protocol="tcp" portid="53">
+        <state state="open" reason="syn-ack" />
+        <service name="domain" method="probed" conf="10" product="ISC BIND" version="9.18.24" />
+      </port>
+    </ports>
+  </host>
+</nmaprun>
