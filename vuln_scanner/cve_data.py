@@ -21,6 +21,9 @@ CATALOG: list[CVERecord] = [
         version="2.3.4",
         cve_id="CVE-2011-2523",
         severity="critical",
+        cvss=9.8,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1190",),
         description="vsftpd 2.3.4 contains a backdoor that opens a root shell on "
                     "port 6200 when a username ending in ':)' is supplied.",
         remediation="Upgrade to a current vsftpd release and verify the binary "
@@ -31,6 +34,9 @@ CATALOG: list[CVERecord] = [
         version="1.3.3c",
         cve_id="CVE-2010-4221",
         severity="critical",
+        cvss=9.8,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1190",),
         description="ProFTPD 1.3.3c ships with a backdoored source tarball that "
                     "grants remote attackers a root shell via a crafted command.",
         remediation="Upgrade to a current ProFTPD release sourced from the "
@@ -41,6 +47,9 @@ CATALOG: list[CVERecord] = [
         version="7.2p2",
         cve_id="CVE-2016-6515",
         severity="medium",
+        cvss=7.5,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        attack_techniques=("T1499",),
         description="OpenSSH through 7.2 allows remote attackers to cause a "
                     "denial of service (crypt CPU consumption) via a long password "
                     "string.",
@@ -52,6 +61,9 @@ CATALOG: list[CVERecord] = [
         version="2.4.49",
         cve_id="CVE-2021-41773",
         severity="critical",
+        cvss=9.8,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1190",),
         description="A path-traversal flaw in Apache HTTP Server 2.4.49 allows "
                     "mapping URLs to files outside the document root, and can lead "
                     "to remote code execution if CGI is enabled.",
@@ -62,6 +74,9 @@ CATALOG: list[CVERecord] = [
         version="2.4.7",
         cve_id="CVE-2014-0160",
         severity="high",
+        cvss=7.5,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        attack_techniques=("T1190",),
         description="Bundled OpenSSL is vulnerable to Heartbleed: an attacker can "
                     "read up to 64KB of process memory per request, potentially "
                     "exposing private keys, session tokens, and credentials.",
@@ -73,6 +88,9 @@ CATALOG: list[CVERecord] = [
         version="6.1",
         cve_id="CVE-2017-0144",
         severity="critical",
+        cvss=8.1,
+        cvss_vector="CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1210",),
         description="The SMBv1 server (\"EternalBlue\") mishandles crafted packets, "
                     "allowing remote code execution as SYSTEM. Used by WannaCry and "
                     "NotPetya for self-propagation.",
@@ -84,6 +102,9 @@ CATALOG: list[CVERecord] = [
         version="3.2.8.1",
         cve_id="CVE-2010-2075",
         severity="critical",
+        cvss=9.8,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1190",),
         description="UnrealIRCd 3.2.8.1 distribution archives were replaced with "
                     "a backdoored version that executes arbitrary commands sent by "
                     "remote attackers.",
@@ -95,6 +116,9 @@ CATALOG: list[CVERecord] = [
         version="3.0.20",
         cve_id="CVE-2007-2447",
         severity="critical",
+        cvss=9.8,
+        cvss_vector="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        attack_techniques=("T1190",),
         description="The 'username map script' option in Samba 3.0.20 through "
                     "3.0.25rc3 allows remote command execution via shell "
                     "metacharacters in a crafted username.",

@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use("Agg")  # headless backend - no display server needed
 import matplotlib.pyplot as plt
 
+from . import attack
 from .models import SEVERITY_ORDER, Vulnerability
 
 SEVERITY_COLORS = {"critical": "#82071e", "high": "#cf222e", "medium": "#9a6700", "low": "#57606a"}
@@ -30,12 +31,12 @@ def to_console(findings: list[Vulnerability]) -> str:
         return "No known vulnerabilities detected."
 
     rows = _sorted(findings)
-    headers = ["Severity", "Host", "Port", "Service", "Product/Version", "CVE", "Description"]
+    headers = ["Severity", "CVSS", "Host", "Port", "Service", "Product/Version", "CVE", "ATT&CK", "Description"]
     table = [headers]
     for f in rows:
         table.append([
-            f.severity.upper(), f.host_ip, f"{f.port}/{f.protocol}", f.service,
-            f"{f.product} {f.version}", f.cve_id, f.description,
+            f.severity.upper(), f"{f.cvss:.1f}", f.host_ip, f"{f.port}/{f.protocol}", f.service,
+            f"{f.product} {f.version}", f.cve_id, ", ".join(f.attack_techniques) or "-", f.description,
         ])
 
     widths = [max(len(str(row[i])) for row in table) for i in range(len(headers))]
@@ -58,10 +59,12 @@ def to_csv(findings: list[Vulnerability]) -> str:
     buf = io.StringIO()
     writer = csv.writer(buf)
     writer.writerow(["severity", "host", "port", "protocol", "service", "product",
-                     "version", "cve_id", "description", "remediation"])
+                     "version", "cve_id", "description", "remediation",
+                     "cvss", "cvss_vector", "attack"])
     for f in _sorted(findings):
         writer.writerow([f.severity, f.host_ip, f.port, f.protocol, f.service, f.product,
-                         f.version, f.cve_id, f.description, f.remediation])
+                         f.version, f.cve_id, f.description, f.remediation,
+                         f.cvss, f.cvss_vector, ";".join(f.attack_techniques)])
     return buf.getvalue()
 
 
@@ -211,6 +214,21 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
   .badge.high     {{ background: #ff6700; }}
   .badge.medium   {{ background: #ff9500; }}
   .badge.low      {{ background: #34c759; }}
+  .cvss {{ font-weight: 700; font-variant-numeric: tabular-nums; }}
+  .att {{
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 0.15rem 0.15rem 0;
+    padding: 0.1rem 0.45rem;
+    border-radius: 5px;
+    background: #eaf2ff;
+    color: #0969da;
+    border: 1px solid #d0e2ff;
+    white-space: nowrap;
+  }}
+  .att:hover {{ border-color: #0969da; }}
   code {{
     font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
     font-size: 0.82em;
@@ -233,8 +251,8 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="card">
     <table>
       <thead>
-        <tr><th>Severity</th><th>Host</th><th>Port</th><th>Service</th>
-            <th>Product / Version</th><th>CVE</th><th>Description</th><th>Remediation</th></tr>
+        <tr><th>Severity</th><th>CVSS</th><th>Host</th><th>Port</th><th>Service</th>
+            <th>Product / Version</th><th>CVE</th><th>ATT&amp;CK</th><th>Description</th><th>Remediation</th></tr>
       </thead>
       <tbody>
         {rows}
@@ -266,20 +284,28 @@ def to_html(findings: list[Vulnerability], source: str = "", host_count: int = 0
 
     body_rows = []
     for f in rows:
+        att_html = " ".join(
+            f'<a class="att" href="{html.escape(attack.url(t))}" target="_blank" '
+            f'rel="noopener" title="{html.escape(attack.name(t))}">{html.escape(t)}</a>'
+            for t in f.attack_techniques
+        ) or "-"
+        cvss_disp = f"{f.cvss:.1f}" if f.cvss else "-"
         body_rows.append(
             f'<tr class="{f.severity}">'
             f'<td><span class="badge {f.severity}">{f.severity.upper()}</span></td>'
+            f'<td class="cvss" title="{html.escape(f.cvss_vector)}">{cvss_disp}</td>'
             f'<td>{html.escape(f.host_ip)}</td>'
             f'<td>{f.port}/{html.escape(f.protocol)}</td>'
             f'<td>{html.escape(f.service)}</td>'
             f'<td>{html.escape(f.product)} {html.escape(f.version)}</td>'
-            f'<td><code>{html.escape(f.cve_id)}</code></td>'
+            f'<td><a href="{html.escape(f.nvd_url)}" target="_blank" rel="noopener"><code>{html.escape(f.cve_id)}</code></a></td>'
+            f'<td>{att_html}</td>'
             f'<td>{html.escape(f.description)}</td>'
             f'<td>{html.escape(f.remediation)}</td>'
             f'</tr>'
         )
     if not body_rows:
-        body_rows.append('<tr><td colspan="8">No known vulnerabilities detected.</td></tr>')
+        body_rows.append('<tr><td colspan="10">No known vulnerabilities detected.</td></tr>')
 
     return _HTML_TEMPLATE.format(
         source=html.escape(source),

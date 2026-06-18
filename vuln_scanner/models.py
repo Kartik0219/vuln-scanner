@@ -40,6 +40,9 @@ class CVERecord:
     severity: str  # "critical" / "high" / "medium" / "low"
     description: str
     remediation: str
+    cvss: float = 0.0  # CVSS v3.1 base score (0.0-10.0)
+    cvss_vector: str = ""
+    attack_techniques: tuple[str, ...] = field(default_factory=tuple)  # MITRE ATT&CK IDs
 
 
 @dataclass
@@ -54,6 +57,13 @@ class Vulnerability:
     severity: str
     description: str
     remediation: str
+    cvss: float = 0.0
+    cvss_vector: str = ""
+    attack_techniques: tuple[str, ...] = field(default_factory=tuple)
 
     def sort_key(self) -> tuple:
         return (SEVERITY_ORDER.get(self.severity, 99), self.host_ip, self.port)
+
+    @property
+    def nvd_url(self) -> str:
+        return f"https://nvd.nist.gov/vuln/detail/{self.cve_id}"

@@ -39,6 +39,19 @@ are both demonstrably real and well-documented:
 Each finding includes a severity rating and a specific remediation step
 so you can verify *why* something was flagged and know what to fix.
 
+### CVSS scores & MITRE ATT&CK
+
+Every finding also carries its **CVSS v3.1 base score** (with vector), a link to
+the **NVD** entry, and the **MITRE ATT&CK** technique the flaw enables — shown in
+the console and CSV, and as a score column + clickable badges/links in the HTML
+report:
+
+| CVE | CVSS | ATT&CK technique |
+|---|---|---|
+| CVE-2017-0144 (EternalBlue) | 8.1 | [T1210 — Exploitation of Remote Services](https://attack.mitre.org/techniques/T1210/) |
+| CVE-2021-41773 (Apache RCE) | 9.8 | [T1190 — Exploit Public-Facing Application](https://attack.mitre.org/techniques/T1190/) |
+| CVE-2016-6515 (OpenSSH DoS) | 7.5 | [T1499 — Endpoint Denial of Service](https://attack.mitre.org/techniques/T1499/) |
+
 ## Installation
 
 ```bash

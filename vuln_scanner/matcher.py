@@ -36,5 +36,8 @@ def match_hosts(hosts: list[Host]) -> list[Vulnerability]:
                     severity=record.severity,
                     description=record.description,
                     remediation=record.remediation,
+                    cvss=record.cvss,
+                    cvss_vector=record.cvss_vector,
+                    attack_techniques=record.attack_techniques,
                 ))
     return sorted(findings, key=Vulnerability.sort_key)
